@@ -1,6 +1,10 @@
 package com.spkd.cricket.simulator
 
 import com.spkd.cricket.model.Player
+import com.spkd.cricket.db.NameDatabase
+import com.spkd.cricket.type.BatsmanType
+import com.spkd.cricket.type.BowlerType
+import com.spkd.cricket.type.PlayerRole
 import kotlin.random.Random
 
 class CricketGame(private val oversPerInning: Int, private val playersPerTeam: Int) {
@@ -24,8 +28,31 @@ class CricketGame(private val oversPerInning: Int, private val playersPerTeam: I
         // Initialize teams with players
         // You can customize player attributes as needed
         repeat(playersPerTeam) {
-            teamA.add(Player("PlayerA$it", Random.nextDouble(20.0, 50.0), Random.nextDouble(20.0, 50.0)))
-            teamB.add(Player("PlayerB$it", Random.nextDouble(20.0, 50.0), Random.nextDouble(20.0, 50.0)))
+            teamA.add(Player(
+                NameDatabase.getRandomBatsmanName(),
+                if (it % 2 == 0) PlayerRole.BATSMAN else PlayerRole.BOWLER,
+                Random.nextDouble(20.0, 50.0),
+                Random.nextDouble(20.0, 50.0),
+                Random.nextDouble(120.0, 150.0), // Bowling speed in km/h
+                batsmanType = when {
+                    it % 3 == 0 -> BatsmanType.OPENER
+                    it % 3 == 1 -> BatsmanType.MIDDLE_ORDER
+                    else -> BatsmanType.FINISHER
+                }
+            ))
+            teamB.add(Player(
+                NameDatabase.getRandomBowlerName(),
+                if (it % 2 == 0) PlayerRole.BATSMAN else PlayerRole.BOWLER,
+                Random.nextDouble(20.0, 50.0),
+                Random.nextDouble(20.0, 50.0),
+                Random.nextDouble(120.0, 150.0), // Bowling speed in km/h
+                bowlerType = when {
+                    it % 4 == 0 -> BowlerType.SEAM
+                    it % 4 == 1 -> BowlerType.OFF_SPIN
+                    it % 4 == 2 -> BowlerType.LEG_SPIN
+                    else -> BowlerType.SLOW_LEFT_ARM
+                }
+            ))
         }
     }
 
@@ -49,15 +76,17 @@ class CricketGame(private val oversPerInning: Int, private val playersPerTeam: I
 
     private fun bowl() {
         val runs = Random.nextInt(0, 7) // Simulate runs from 0 to 6
+        val battingOutcome = Random.nextDouble(0.0, 1.0)
+
         println("${currentPlayer!!.name} scores $runs run(s) in inning $inning, over $currentOver, ball $currentBall")
 
         if (inning == 1) {
-            totalScoreTeamA += runs
+            totalScoreTeamA += if (currentPlayer in teamA) runs else 0
         } else {
-            totalScoreTeamB += runs
+            totalScoreTeamB += if (currentPlayer in teamB) runs else 0
         }
 
-        if (runs == 0) {
+        if (runs == 0 || battingOutcome > currentPlayer!!.battingSkill) {
             if (inning == 1) {
                 totalWicketsTeamA++
             } else {
@@ -75,6 +104,8 @@ class CricketGame(private val oversPerInning: Int, private val playersPerTeam: I
         }
     }
 
+
+
     private fun printMatchResult() {
         println("Match Over!")
 
@@ -90,15 +121,14 @@ class CricketGame(private val oversPerInning: Int, private val playersPerTeam: I
 
     fun playGame() {
         println("Cricket Game Started!")
-
+        totalScoreTeamA = 0
+        totalScoreTeamB = 0
+        totalWicketsTeamA = 0
+        totalWicketsTeamB = 0
         // First Inning
         while (inning <= 2) {
             currentOver = 1
             currentBall = 1
-            totalScoreTeamA = 0
-            totalScoreTeamB = 0
-            totalWicketsTeamA = 0
-            totalWicketsTeamB = 0
             currentPlayer = if (inning == 1) teamA.first() else teamB.first()
 
             while (currentOver <= oversPerInning && totalWicketsTeamA < playersPerTeam && totalWicketsTeamB < playersPerTeam) {
@@ -114,7 +144,6 @@ class CricketGame(private val oversPerInning: Int, private val playersPerTeam: I
 
             switchTeams()
         }
-
         printMatchResult()
     }
 }
