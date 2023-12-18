@@ -9,8 +9,13 @@ repositories {
     mavenCentral()
 }
 
+
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test")
+    implementation("no.tornado:tornadofx:1.7.20")
+    implementation("org.openjfx:javafx-controls:16")
+    implementation("org.openjfx:javafx-fxml:16")
+    implementation("org.openjfx:javafx-graphics:16")
 }
 
 tasks.test {
