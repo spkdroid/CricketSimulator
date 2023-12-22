@@ -1,14 +1,12 @@
-# Cricket Simulator Game
-
 <h1 align="center" style="text-align: center; padding-bottom: 20px;">
   <br>
- <img src="https://github.com/spkdroid/C51/blob/master/app/src/main/res/mipmap-hdpi/ic_launcher.png" alt="Icon" width="220"/>
+ <img src="https://github.com/spkdroid/CricketSimulator/blob/master/cricket_icon.png" alt="Icon" width="220"/>
   <br>
-   A console-based cricket simulator game written in Kotlin.
+   Cricket Simulator Game
   <br>
 </h1>
 
-
+A console-based cricket simulator game written in Kotlin.
 ## Table of Contents
 
 - [Introduction](#introduction)
