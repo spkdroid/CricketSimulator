@@ -1,6 +1,13 @@
 # Cricket Simulator Game
 
-A console-based cricket simulator game written in Kotlin.
+<h1 align="center" style="text-align: center; padding-bottom: 20px;">
+  <br>
+ <img src="https://github.com/spkdroid/C51/blob/master/app/src/main/res/mipmap-hdpi/ic_launcher.png" alt="Icon" width="220"/>
+  <br>
+   A console-based cricket simulator game written in Kotlin.
+  <br>
+</h1>
+
 
 ## Table of Contents
 
